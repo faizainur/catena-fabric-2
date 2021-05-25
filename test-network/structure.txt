@@ -1,0 +1,303 @@
+.
+├── README.md
+├── addOrg3
+│   ├── README.md
+│   ├── addOrg3.sh
+│   ├── ccp-generate.sh
+│   ├── ccp-template.json
+│   ├── ccp-template.yaml
+│   ├── configtx.yaml
+│   ├── docker
+│   │   ├── docker-compose-ca-org3.yaml
+│   │   ├── docker-compose-couch-org3.yaml
+│   │   └── docker-compose-org3.yaml
+│   ├── fabric-ca
+│   │   ├── org3
+│   │   │   └── fabric-ca-server-config.yaml
+│   │   └── registerEnroll.sh
+│   └── org3-crypto.yaml
+├── configtx
+│   └── configtx.yaml
+├── docker
+│   ├── docker-compose-ca.yaml
+│   ├── docker-compose-couch.yaml
+│   └── docker-compose-test-net.yaml
+├── network.sh
+├── organizations
+│   ├── ccp-generate.sh
+│   ├── ccp-template.json
+│   ├── ccp-template.yaml
+│   ├── cryptogen
+│   │   ├── crypto-config-orderer.yaml
+│   │   ├── crypto-config-org1.yaml
+│   │   └── crypto-config-org2.yaml
+│   ├── fabric-ca
+│   │   ├── ordererOrg
+│   │   │   ├── IssuerPublicKey
+│   │   │   ├── IssuerRevocationPublicKey
+│   │   │   ├── ca-cert.pem
+│   │   │   ├── fabric-ca-server-config.yaml
+│   │   │   ├── fabric-ca-server.db
+│   │   │   ├── msp
+│   │   │   │   ├── cacerts
+│   │   │   │   ├── keystore
+│   │   │   │   │   ├── 35a80723ce25bccfbe6a80fe8fb46aaa8d271f5fcdab7294ef074492845f640d_sk
+│   │   │   │   │   ├── 4028794d3cff7a0b64848d6eeceb61d64a0c6c27f7de84f28f8c9c541baf9ac4_sk
+│   │   │   │   │   ├── IssuerRevocationPrivateKey
+│   │   │   │   │   └── IssuerSecretKey
+│   │   │   │   ├── signcerts
+│   │   │   │   └── user
+│   │   │   └── tls-cert.pem
+│   │   ├── org1
+│   │   │   ├── IssuerPublicKey
+│   │   │   ├── IssuerRevocationPublicKey
+│   │   │   ├── ca-cert.pem
+│   │   │   ├── fabric-ca-server-config.yaml
+│   │   │   ├── fabric-ca-server.db
+│   │   │   ├── msp
+│   │   │   │   ├── cacerts
+│   │   │   │   ├── keystore
+│   │   │   │   │   ├── 979f2cfc09d4511e4f500a22b7de99924e732454bd4d27fd10a3be628a6dd480_sk
+│   │   │   │   │   ├── IssuerRevocationPrivateKey
+│   │   │   │   │   ├── IssuerSecretKey
+│   │   │   │   │   └── d6f1559034cdb33ebba35ee80202059f10cedae572ef1b0a554a94f157810337_sk
+│   │   │   │   ├── signcerts
+│   │   │   │   └── user
+│   │   │   └── tls-cert.pem
+│   │   ├── org2
+│   │   │   ├── IssuerPublicKey
+│   │   │   ├── IssuerRevocationPublicKey
+│   │   │   ├── ca-cert.pem
+│   │   │   ├── fabric-ca-server-config.yaml
+│   │   │   ├── fabric-ca-server.db
+│   │   │   ├── msp
+│   │   │   │   ├── cacerts
+│   │   │   │   ├── keystore
+│   │   │   │   │   ├── 5b4888c4290883e914a1dba53313e2b65937ada9546b63054113cfed2f7a7274_sk
+│   │   │   │   │   ├── 83a704cb09aff3b9081255516958b756c2a725e76dffa3597f15590c876aeaf1_sk
+│   │   │   │   │   ├── IssuerRevocationPrivateKey
+│   │   │   │   │   └── IssuerSecretKey
+│   │   │   │   ├── signcerts
+│   │   │   │   └── user
+│   │   │   └── tls-cert.pem
+│   │   └── registerEnroll.sh
+│   ├── ordererOrganizations
+│   │   └── example.com
+│   │       ├── fabric-ca-client-config.yaml
+│   │       ├── msp
+│   │       │   ├── IssuerPublicKey
+│   │       │   ├── IssuerRevocationPublicKey
+│   │       │   ├── cacerts
+│   │       │   │   └── localhost-9054-ca-orderer.pem
+│   │       │   ├── config.yaml
+│   │       │   ├── keystore
+│   │       │   │   └── 16216815a2ab8ba6c6b92161a07d1ee3545e3eb23ee812736c78e4d5bc8ce1ac_sk
+│   │       │   ├── signcerts
+│   │       │   │   └── cert.pem
+│   │       │   ├── tlscacerts
+│   │       │   │   └── tlsca.example.com-cert.pem
+│   │       │   └── user
+│   │       ├── orderers
+│   │       │   └── orderer.example.com
+│   │       │       ├── msp
+│   │       │       │   ├── IssuerPublicKey
+│   │       │       │   ├── IssuerRevocationPublicKey
+│   │       │       │   ├── cacerts
+│   │       │       │   │   └── localhost-9054-ca-orderer.pem
+│   │       │       │   ├── config.yaml
+│   │       │       │   ├── keystore
+│   │       │       │   │   └── 14783c3ee47d5a7409d61c58276021f1b70ab24b6867bff5c1e2c775b4b427d9_sk
+│   │       │       │   ├── signcerts
+│   │       │       │   │   └── cert.pem
+│   │       │       │   ├── tlscacerts
+│   │       │       │   │   └── tlsca.example.com-cert.pem
+│   │       │       │   └── user
+│   │       │       └── tls
+│   │       │           ├── IssuerPublicKey
+│   │       │           ├── IssuerRevocationPublicKey
+│   │       │           ├── ca.crt
+│   │       │           ├── cacerts
+│   │       │           ├── keystore
+│   │       │           │   └── e7a91ceaad8e8c5f683aef908b8dc8f3c21d9752a2aa445419b351450f97609e_sk
+│   │       │           ├── server.crt
+│   │       │           ├── server.key
+│   │       │           ├── signcerts
+│   │       │           │   └── cert.pem
+│   │       │           ├── tlscacerts
+│   │       │           │   └── tls-localhost-9054-ca-orderer.pem
+│   │       │           └── user
+│   │       └── users
+│   │           └── Admin@example.com
+│   │               └── msp
+│   │                   ├── IssuerPublicKey
+│   │                   ├── IssuerRevocationPublicKey
+│   │                   ├── cacerts
+│   │                   │   └── localhost-9054-ca-orderer.pem
+│   │                   ├── config.yaml
+│   │                   ├── keystore
+│   │                   │   └── 0b8bee877457d2b76a46b09137025ee67c6f06be821fa445c42b95bc018a5810_sk
+│   │                   ├── signcerts
+│   │                   │   └── cert.pem
+│   │                   └── user
+│   └── peerOrganizations
+│       ├── org1.example.com
+│       │   ├── ca
+│       │   │   └── ca.org1.example.com-cert.pem
+│       │   ├── connection-org1.json
+│       │   ├── connection-org1.yaml
+│       │   ├── fabric-ca-client-config.yaml
+│       │   ├── msp
+│       │   │   ├── IssuerPublicKey
+│       │   │   ├── IssuerRevocationPublicKey
+│       │   │   ├── cacerts
+│       │   │   │   └── localhost-7054-ca-org1.pem
+│       │   │   ├── config.yaml
+│       │   │   ├── keystore
+│       │   │   │   └── 1b7706039448050994e8e3e4aa0c3b81ffcdd6264a2984e0ce1e6ba7e1a014d2_sk
+│       │   │   ├── signcerts
+│       │   │   │   └── cert.pem
+│       │   │   ├── tlscacerts
+│       │   │   │   └── ca.crt
+│       │   │   └── user
+│       │   ├── peers
+│       │   │   └── peer0.org1.example.com
+│       │   │       ├── msp
+│       │   │       │   ├── IssuerPublicKey
+│       │   │       │   ├── IssuerRevocationPublicKey
+│       │   │       │   ├── cacerts
+│       │   │       │   │   └── localhost-7054-ca-org1.pem
+│       │   │       │   ├── config.yaml
+│       │   │       │   ├── keystore
+│       │   │       │   │   └── 15fd7dab0e296f60f5586620eb3396c28037e8eee07e0cee39446db09fe2e371_sk
+│       │   │       │   ├── signcerts
+│       │   │       │   │   └── cert.pem
+│       │   │       │   └── user
+│       │   │       └── tls
+│       │   │           ├── IssuerPublicKey
+│       │   │           ├── IssuerRevocationPublicKey
+│       │   │           ├── ca.crt
+│       │   │           ├── cacerts
+│       │   │           ├── keystore
+│       │   │           │   └── e02062ccd39a0ff7b89bbdca7d01018cc0bb1f0cd7aa929528520f44a499c7f0_sk
+│       │   │           ├── server.crt
+│       │   │           ├── server.key
+│       │   │           ├── signcerts
+│       │   │           │   └── cert.pem
+│       │   │           ├── tlscacerts
+│       │   │           │   └── tls-localhost-7054-ca-org1.pem
+│       │   │           └── user
+│       │   ├── tlsca
+│       │   │   └── tlsca.org1.example.com-cert.pem
+│       │   └── users
+│       │       ├── Admin@org1.example.com
+│       │       │   └── msp
+│       │       │       ├── IssuerPublicKey
+│       │       │       ├── IssuerRevocationPublicKey
+│       │       │       ├── cacerts
+│       │       │       │   └── localhost-7054-ca-org1.pem
+│       │       │       ├── config.yaml
+│       │       │       ├── keystore
+│       │       │       │   └── decf8f3a53ba0b6e99c469e5454faa647d3e566bd3eecd29df247b91dd0186e6_sk
+│       │       │       ├── signcerts
+│       │       │       │   └── cert.pem
+│       │       │       └── user
+│       │       └── User1@org1.example.com
+│       │           └── msp
+│       │               ├── IssuerPublicKey
+│       │               ├── IssuerRevocationPublicKey
+│       │               ├── cacerts
+│       │               │   └── localhost-7054-ca-org1.pem
+│       │               ├── config.yaml
+│       │               ├── keystore
+│       │               │   └── 5d7c44c798a449fa85887ca3ec4aa777b09f0ac1bca1ad3fff84e6cfd00735e7_sk
+│       │               ├── signcerts
+│       │               │   └── cert.pem
+│       │               └── user
+│       └── org2.example.com
+│           ├── ca
+│           │   └── ca.org2.example.com-cert.pem
+│           ├── connection-org2.json
+│           ├── connection-org2.yaml
+│           ├── fabric-ca-client-config.yaml
+│           ├── msp
+│           │   ├── IssuerPublicKey
+│           │   ├── IssuerRevocationPublicKey
+│           │   ├── cacerts
+│           │   │   └── localhost-8054-ca-org2.pem
+│           │   ├── config.yaml
+│           │   ├── keystore
+│           │   │   └── 67b13d8f2803a5ed813008b42beb70a8cdd4e8fe4a56fd2d71e045251b770519_sk
+│           │   ├── signcerts
+│           │   │   └── cert.pem
+│           │   ├── tlscacerts
+│           │   │   └── ca.crt
+│           │   └── user
+│           ├── peers
+│           │   └── peer0.org2.example.com
+│           │       ├── msp
+│           │       │   ├── IssuerPublicKey
+│           │       │   ├── IssuerRevocationPublicKey
+│           │       │   ├── cacerts
+│           │       │   │   └── localhost-8054-ca-org2.pem
+│           │       │   ├── config.yaml
+│           │       │   ├── keystore
+│           │       │   │   └── 3b787e4fea3780650b9631caac8dfe2c866b595283012095b04c11340f1fb766_sk
+│           │       │   ├── signcerts
+│           │       │   │   └── cert.pem
+│           │       │   └── user
+│           │       └── tls
+│           │           ├── IssuerPublicKey
+│           │           ├── IssuerRevocationPublicKey
+│           │           ├── ca.crt
+│           │           ├── cacerts
+│           │           ├── keystore
+│           │           │   └── 0aa6622489709182d9110a6cd166ef0d6c20bf6180367e4530a48d64712d1de7_sk
+│           │           ├── server.crt
+│           │           ├── server.key
+│           │           ├── signcerts
+│           │           │   └── cert.pem
+│           │           ├── tlscacerts
+│           │           │   └── tls-localhost-8054-ca-org2.pem
+│           │           └── user
+│           ├── tlsca
+│           │   └── tlsca.org2.example.com-cert.pem
+│           └── users
+│               ├── Admin@org2.example.com
+│               │   └── msp
+│               │       ├── IssuerPublicKey
+│               │       ├── IssuerRevocationPublicKey
+│               │       ├── cacerts
+│               │       │   └── localhost-8054-ca-org2.pem
+│               │       ├── config.yaml
+│               │       ├── keystore
+│               │       │   └── 2448e265d711f68f24e83c070470f8f814b0d04eec47bc15424c04893790c6dc_sk
+│               │       ├── signcerts
+│               │       │   └── cert.pem
+│               │       └── user
+│               └── User1@org2.example.com
+│                   └── msp
+│                       ├── IssuerPublicKey
+│                       ├── IssuerRevocationPublicKey
+│                       ├── cacerts
+│                       │   └── localhost-8054-ca-org2.pem
+│                       ├── config.yaml
+│                       ├── keystore
+│                       │   └── becfae9475f6d67127ace539693201b5b70e0abb7ab0850b97d6d71f242733f0_sk
+│                       ├── signcerts
+│                       │   └── cert.pem
+│                       └── user
+├── scripts
+│   ├── configUpdate.sh
+│   ├── createChannel.sh
+│   ├── deployCC.sh
+│   ├── envVar.sh
+│   ├── org3-scripts
+│   │   ├── joinChannel.sh
+│   │   └── updateChannelConfig.sh
+│   ├── setAnchorPeer.sh
+│   └── utils.sh
+├── structure.txt
+└── system-genesis-block
+    └── genesis.block
+
+131 directories, 169 files
