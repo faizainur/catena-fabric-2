@@ -19,6 +19,7 @@ type CreditRecord struct {
 	CreditType string `json:"credit_type,omitempty"  bson:"credit_type"  form:"credit_type"  binding:"credit_type"`
 	BankName   string `json:"bank_name,omitempty"  bson:"bank_name"  form:"bank_name"  binding:"bank_name"`
 	Amount     string `json:"amount,omitempty"  bson:"amount"  form:"amount"  binding:"amount"`
+	Status     string `json:"status,omitempty"  bson:"status"  form:"status"  binding:"status"`
 }
 
 type PaginatedQueryResult struct {
@@ -67,7 +68,7 @@ func (s *SmartContract) CheckCreditFromSameBank(ctx contractapi.TransactionConte
 }
 
 func (s *SmartContract) CreateAsset(ctx contractapi.TransactionContextInterface, recordId string, userUid string,
-	nik string, creditType string, bankName string, amount string) error {
+	nik string, creditType string, bankName string, amount string, status string) error {
 	checkStatus, err := s.CheckCreditFromSameBank(ctx, userUid, bankName)
 	if err != nil {
 		fmt.Printf("A")
@@ -84,6 +85,7 @@ func (s *SmartContract) CreateAsset(ctx contractapi.TransactionContextInterface,
 		CreditType: creditType,
 		BankName:   bankName,
 		Amount:     amount,
+		Status:     status,
 	}
 
 	assetJson, err := json.Marshal(creditRecord)
@@ -168,7 +170,7 @@ func (s *SmartContract) GetAllAssets(ctx contractapi.TransactionContextInterface
 }
 
 func (s *SmartContract) UpdateAsset(ctx contractapi.TransactionContextInterface, recordId string, userUid string,
-	nik string, creditType string, bankName string, amount string) error {
+	nik string, creditType string, bankName string, amount string, status string) error {
 	exists, err := s.AssetExists(ctx, recordId)
 	if err != nil {
 		return err
@@ -183,6 +185,7 @@ func (s *SmartContract) UpdateAsset(ctx contractapi.TransactionContextInterface,
 		CreditType: creditType,
 		BankName:   bankName,
 		Amount:     amount,
+		Status:     status,
 	}
 	assetJson, err := json.Marshal(creditRecord)
 	if err != nil {

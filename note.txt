@@ -3,6 +3,7 @@
 ./network.sh createChannel -c crchannel
 
 ./network.sh deployCC -ccn upcc -ccp ../cckyc -ccl go -c upchannel
+./network.sh deployCC -ccn creditcc -ccp ../creditcc -ccl go -c crchannel
 
 export FABRIC_CFG_PATH=${PWD}/config
 export PATH=$PATH:${PWD}/bin

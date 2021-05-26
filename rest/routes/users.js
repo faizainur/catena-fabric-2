@@ -63,4 +63,40 @@ router.post('/delete', async (req, res) => {
   }
 })
 
+router.get('/exist', async (req, res) => {
+  try {
+    result = await upcc.isExist(req.query.user_uid)
+    console.log(`${result}`)
+    res.send(result)
+  } catch (error) {
+    res.send(error)
+  }
+})
+
+router.post('/update', async (req, res, next) => {
+  try {
+    
+    var user = {
+      userUid: `${req.body.user_uid}`, 
+      firstName: `${req.body.first_name}`,
+      lastName: `${req.body.last_name}`,
+      addressLine1: `${req.body.address_line_1}`,
+      addressLine2: `${req.body.address_line_2}`,
+      city: `${req.body.city}`,
+      province: `${req.body.province}`,
+      postalCode: `${req.body.postal_code}`,
+      ttl: `${req.body.ttl}`,
+      nik: `${req.body.nik}`,
+      idCard:`${req.body.id_card}`,
+      businessLicense: `${req.body.business_license}`
+    };
+    await upcc.updateAsset(user)
+    res.status(200)
+    res.send('OK')
+  } catch (error) {
+    res.status(500);
+    res.send(error)
+  }
+})
+
 module.exports = router;

@@ -5,6 +5,7 @@ const FabricCAServices = require('fabric-ca-client');
 const path = require('path');
 const { buildCAClient, registerAndEnrollUser, enrollAdmin } = require('../../test-application/javascript/CAUtil.js');
 const { buildCCPOrg1, buildWallet } = require('../../test-application/javascript/AppUtil.js');
+const { resolve } = require('path');
 
 const channelName = 'upchannel';
 const chaincodeName = 'upcc';
@@ -94,7 +95,7 @@ exports.createAsset = async (user) => {
                 gateway.disconnect();
             }
         } catch (error) {
-            console.error(`ERROR upcc chaincode getAllAssets : ${error}`);
+            console.error(`ERROR upcc chaincode createAsset : ${error}`);
             reject(error.message)
         }
     })
@@ -156,7 +157,73 @@ exports.deleteAsset = (userUid) => {
                 gateway.disconnect();
             }
         } catch (error) {
-            console.error(`ERROR upcc chaincode getAllAssets : ${error}`);
+            console.error(`ERROR upcc chaincode deleteAsset : ${error}`);
+            reject(error.message)
+        }
+    })
+}
+
+exports.updateAsset = (user) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const gateway = new Gateway()
+
+            try {
+                await gateway.connect(ccp, {
+                    wallet,
+                    identity: org1UserId,
+                    discovery: { enabled: true, asLocalhost: true } // using asLocalhost as this gateway is using a fabric network deployed locally
+                });
+
+                // Build a network instance based on the channel where the smart contract is deployed
+                const network = await gateway.getNetwork(channelName);
+
+                // Get the contract from the network.
+                const contract = network.getContract(chaincodeName);
+
+                // console.log('\n--> Evaluate Transaction: GetAllAssets, function returns all the current assets on the ledger');
+                var result = await contract.submitTransaction('UpdateAsset', user.userUid, user.firstName, user.lastName,user.addressLine1, user.addressLine2, user.city, user.province, user.postalCode, user.ttl, user.nik, user.idCard, user.businessLicense);			
+                // console.log(`*** Result: ${prettyJSONString(result3.toString())}`);
+
+                resolve(result);
+            } finally {
+                gateway.disconnect();
+            }
+        } catch (error) {
+            console.error(`ERROR upcc chaincode updateAsset : ${error}`);
+            reject(error.message)
+        }
+    })
+}
+
+exports.isExist = (userUid) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const gateway = new Gateway()
+
+            try {
+                await gateway.connect(ccp, {
+                    wallet,
+                    identity: org1UserId,
+                    discovery: { enabled: true, asLocalhost: true } // using asLocalhost as this gateway is using a fabric network deployed locally
+                });
+
+                // Build a network instance based on the channel where the smart contract is deployed
+                const network = await gateway.getNetwork(channelName);
+
+                // Get the contract from the network.
+                const contract = network.getContract(chaincodeName);
+
+                // console.log('\n--> Evaluate Transaction: GetAllAssets, function returns all the current assets on the ledger');
+                var result = await contract.submitTransaction('AssetExists', userUid);			
+                // console.log(`*** Result: ${prettyJSONString(result3.toString())}`);
+
+                resolve(result);
+            } finally {
+                gateway.disconnect();
+            }
+        } catch (error) {
+            console.error(`ERROR upcc chaincode assetExist : ${error}`);
             reject(error.message)
         }
     })
