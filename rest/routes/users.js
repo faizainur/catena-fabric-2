@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var upcc = require('../services/upcc')
+var authService = require('../services/auth')
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -16,7 +17,7 @@ router.get('/list', async (req, res, next) => {
   }
 })
 
-router.get('/get', async (req, res, next) => {
+router.get('/get', authService.validateJwt, async (req, res, next) => {
   try {
     var result = await upcc.readAsset(req.query.user_uid)
     res.send(result)
@@ -26,7 +27,23 @@ router.get('/get', async (req, res, next) => {
   }
 })
 
-router.post('/register', async (req, res, next) => {
+router.get('/bank/get', authService.introspectToken, async (req, res, next) => {
+  try {
+    var userUid = `${req.query.user_uid}`
+    if (userUid === '' || userUid === "undefined") {
+      res.status(400)
+      res.send('Bad Request')
+    } else {
+      var result = await upcc.readAsset(userUid)
+      res.send(result)
+    }
+  } catch (error) {
+    res.status(500);
+    res.send(error.message)
+  }
+})
+
+router.post('/register', authService.validateJwt, async (req, res, next) => {
   try {
     
     var user = {
@@ -47,7 +64,7 @@ router.post('/register', async (req, res, next) => {
     res.status(200)
     res.send('OK')
   } catch (error) {
-    res.status(500);
+    res.status(400);
     res.send(error)
   }
 })
@@ -73,7 +90,7 @@ router.get('/exist', async (req, res) => {
   }
 })
 
-router.post('/update', async (req, res, next) => {
+router.post('/update',authService.validateJwt,  async (req, res, next) => {
   try {
     
     var user = {

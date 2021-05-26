@@ -57,7 +57,7 @@ exports.getAllAssets = async () => {
                 var result = await contract.evaluateTransaction('GetAllAssets');
                 // console.log(`*** Result: ${prettyJSONString(result3.toString())}`);
 
-                resolve(result)
+                resolve(JSON.parse(result))
             } finally {
                 gateway.disconnect();
             }
@@ -120,7 +120,7 @@ exports.readAsset = (userUid) => {
                 const contract = network.getContract(chaincodeName);
 
                 var result = await contract.evaluateTransaction('ReadAsset', userUid);
-                resolve(result);
+                resolve(JSON.parse(result));
             } finally {
                 gateway.disconnect();
             }

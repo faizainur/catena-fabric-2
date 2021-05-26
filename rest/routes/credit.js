@@ -34,7 +34,7 @@ router.post('/create', async (req, res, next) => {
     res.status(200)
     res.send('OK')
   } catch (error) {
-    res.status(500);
+    res.status(400);
     res.send(error)
   }
 })
