@@ -13,4 +13,11 @@ router.get('/test', authService.validateJwt, function(req, res, next) {
   res.send("hello")
 });
 
+router.get('/ping', (req, res) => {
+  res.send({
+    "code": 200,
+    "status": "active"
+  })
+})
+
 module.exports = router;
