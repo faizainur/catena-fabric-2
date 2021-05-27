@@ -16,7 +16,7 @@ var app = express();
 var corsOptions = {
   origin: ['https://dashboard.catena.id', 'https://api.catena.id', 'https://catena.id'],
   methods: ['GET', 'PUT', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Content-Length', 'Accept-Encoding', 'X-CSRF-Token', 'Authorization', 'accept', 'origin', 'Cache-Control', 'X-Requesed-With'],
+  allowedHeaders: ['Content-Type', 'Content-Length', 'Accept-Encoding', 'X-CSRF-Token', 'Authorization', 'accept', 'origin', 'Cache-Control', 'X-Requested-With'],
   credentials: true
 }
 
