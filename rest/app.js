@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors = require('cors')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -12,6 +13,14 @@ var crcc = require('./services/crcc')
 
 var app = express();
 
+var corsOptions = {
+  origin: ['https://dashboard.catena.id', 'https://api.catena.id', 'https://catena.id'],
+  methods: ['GET', 'PUT', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Content-Length', 'Accept-Encoding', 'X-CSRF-Token', 'Authorization', 'accept', 'origin', 'Cache-Control', 'X-Requesed-With'],
+  credentials: true
+}
+
+app.use(cors(corsOptions))
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
