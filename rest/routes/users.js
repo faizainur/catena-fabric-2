@@ -60,6 +60,9 @@ router.post('/register', authService.validateJwt, async (req, res, next) => {
       idCard:`${req.body.id_card}`,
       businessLicense: `${req.body.business_license}`
     };
+
+    console.log(user)
+
     await upcc.createAsset(user)
     res.status(200)
     res.send('OK')
