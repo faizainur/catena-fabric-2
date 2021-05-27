@@ -1,0 +1,13 @@
+[Unit]
+Description=Catena Fabric REST API
+
+[Service]
+ExecStart=./bin/www
+Restart=always
+User=nogroup
+Group=nogroup
+Environment=PATH=/usr/bin:/usr/local/bin
+WorkingDirectory=./
+
+[Install]
+WantedBy=multi-user.target
