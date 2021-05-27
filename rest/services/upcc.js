@@ -57,7 +57,11 @@ exports.getAllAssets = async () => {
                 var result = await contract.evaluateTransaction('GetAllAssets');
                 // console.log(`*** Result: ${prettyJSONString(result3.toString())}`);
 
-                resolve(JSON.parse(result))
+                if (result.length > 0) {
+                    resolve(JSON.parse(result))
+                } else {
+                    resolve("[]")
+                }
             } finally {
                 gateway.disconnect();
             }
