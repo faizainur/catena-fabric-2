@@ -186,7 +186,7 @@ exports.updateAsset = (user) => {
                 const contract = network.getContract(chaincodeName);
 
                 // console.log('\n--> Evaluate Transaction: GetAllAssets, function returns all the current assets on the ledger');
-                var result = await contract.submitTransaction('UpdateAsset', user.userUid, user.firstName, user.lastName,user.addressLine1, user.addressLine2, user.city, user.province, user.postalCode, user.ttl, user.nik, user.idCard, user.businessLicense);			
+                var result = await contract.submitTransaction('UpdateAsset', user.userUid, user.email, user.firstName, user.lastName,user.addressLine1, user.addressLine2, user.city, user.province, user.postalCode, user.ttl, user.nik, user.idCard, user.businessLicense);			
                 // console.log(`*** Result: ${prettyJSONString(result3.toString())}`);
 
                 resolve(result);
