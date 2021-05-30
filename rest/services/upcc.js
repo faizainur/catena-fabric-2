@@ -91,7 +91,7 @@ exports.createAsset = async (user) => {
                 const contract = network.getContract(chaincodeName);
 
                 // console.log('\n--> Evaluate Transaction: GetAllAssets, function returns all the current assets on the ledger');
-                var result = await contract.submitTransaction('CreateAsset', user.userUid, user.firstName, user.lastName,user.addressLine1, user.addressLine2, user.city, user.province, user.postalCode, user.ttl, user.nik, user.idCard, user.businessLicense);			
+                var result = await contract.submitTransaction('CreateAsset', user.userUid,user.email, user.firstName, user.lastName,user.addressLine1, user.addressLine2, user.city, user.province, user.postalCode, user.ttl, user.nik, user.idCard, user.businessLicense);			
                 // console.log(`*** Result: ${prettyJSONString(result3.toString())}`);
 
                 resolve(result);
@@ -229,6 +229,39 @@ exports.isExist = (userUid) => {
         } catch (error) {
             console.error(`ERROR upcc chaincode assetExist : ${error}`);
             reject(error.message)
+        }
+    })
+}
+
+exports.readAssetByEmail = (email) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const gateway = new Gateway()
+
+            try {
+                await gateway.connect(ccp, {
+                    wallet,
+                    identity: org1UserId,
+                    discovery: { enabled: true, asLocalhost: true } // using asLocalhost as this gateway is using a fabric network deployed locally
+                });
+
+                // Build a network instance based on the channel where the smart contract is deployed
+                const network = await gateway.getNetwork(channelName);
+
+                // Get the contract from the network.
+                const contract = network.getContract(chaincodeName);
+
+                var result = await contract.evaluateTransaction('ReadAssetByEmail', email);
+                if (result.length > 0) {
+                    resolve(JSON.parse(result))
+                } else {
+                    resolve("[]")
+                }
+            } finally {
+                gateway.disconnect();
+            }
+        } catch (error) {
+            reject(error)
         }
     })
 }

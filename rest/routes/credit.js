@@ -111,4 +111,14 @@ router.get('/search', async (req, res) => {
     }
 })
 
+router.get('/list/bank', async (req, res) => {
+    try {
+        var result = await crcc.readAssetByBank(req.query.name)
+        res.send(result)
+    } catch (error) {
+        res.status(400)
+        res.send(error)
+    }
+})
+
 module.exports = router;

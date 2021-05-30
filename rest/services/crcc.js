@@ -182,6 +182,39 @@ exports.readAssetByUserUid = (userUid) => {
     })
 }
 
+exports.readAssetByBank = (bankName) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const gateway = new Gateway()
+
+            try {
+                await gateway.connect(ccp, {
+                    wallet,
+                    identity: org1UserId,
+                    discovery: { enabled: true, asLocalhost: true } // using asLocalhost as this gateway is using a fabric network deployed locally
+                });
+
+                // Build a network instance based on the channel where the smart contract is deployed
+                const network = await gateway.getNetwork(channelName);
+
+                // Get the contract from the network.
+                const contract = network.getContract(chaincodeName);
+
+                var result = await contract.evaluateTransaction('ReadAssetByBank', bankName);
+                if (result.length > 0) {
+                    resolve(JSON.parse(result))
+                } else {
+                    resolve("[]")
+                }
+            } finally {
+                gateway.disconnect();
+            }
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
 exports.isExist = (recordId) => {
     return new Promise(async (resolve, reject) => {
         try {

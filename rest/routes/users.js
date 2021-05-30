@@ -48,6 +48,7 @@ router.post('/register', authService.validateJwt, async (req, res, next) => {
     
     var user = {
       userUid: `${req.body.user_uid}`, 
+      email: `${req.body.email}`, 
       firstName: `${req.body.first_name}`,
       lastName: `${req.body.last_name}`,
       addressLine1: `${req.body.address_line_1}`,
@@ -98,6 +99,7 @@ router.post('/update',authService.validateJwt,  async (req, res, next) => {
     
     var user = {
       userUid: `${req.body.user_uid}`, 
+      email: `${req.body.email}`, 
       firstName: `${req.body.first_name}`,
       lastName: `${req.body.last_name}`,
       addressLine1: `${req.body.address_line_1}`,
@@ -117,6 +119,16 @@ router.post('/update',authService.validateJwt,  async (req, res, next) => {
     res.status(500);
     res.send(error)
   }
+})
+
+router.get('/search', async (req, res) => {
+    try {
+        var result = await upcc.readAssetByEmail(req.query.email)
+        res.send(result)
+    } catch (error) {
+        res.status(400)
+        res.send(error)
+    }
 })
 
 module.exports = router;

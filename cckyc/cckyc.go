@@ -19,6 +19,7 @@ type SmartContract struct {
 
 type User struct {
 	UserUid         string `json:"user_uid,omitempty"  bson:"user_uid"  form:"user_uid"  binding:"user_uid"`
+	Email           string `json:"email,omitempty"  bson:"email"  form:"email"  binding:"email"`
 	FirstName       string `json:"first_name,omitempty"  bson:"first_name"  form:"first_name"  binding:"first_name"`
 	LastName        string `json:"last_name,omitempty"  bson:"last_name"  form:"last_name"  binding:"last_name"`
 	AddressLine1    string `json:"address_line_1,omitempty"  bson:"address_line_1"  form:"address_line_1"  binding:"address_line_1"`
@@ -28,9 +29,11 @@ type User struct {
 	PostalCode      int    `json:"postal_code,omitempty"  bson:"postal_code"  form:"postal_code"  binding:"postal_code"`
 	Ttl             string `json:"ttl,omitempty"  bson:"ttl"  form:"ttl"  binding:"ttl"`
 	Nik             string `json:"nik,omitempty"  bson:"nik"  form:"nik"  binding:"nik"`
-	IdCard          string `json:"idcard,omitempty"  bson:"id_card"  form:"id_card"  binding:"id_card"`
+	IdCard          string `json:"idcard,omitempty"  bson:"idcard"  form:"idcard"  binding:"idcard"`
 	BusinessLicense string `json:"business_license,omitempty"  bson:"business_license"  form:"business_license"  binding:"business_license"`
 }
+
+const index = "email~useruid"
 
 func main() {
 	assetChaincode, err := contractapi.NewChaincode(&SmartContract{})
@@ -43,7 +46,7 @@ func main() {
 	}
 }
 
-func (s *SmartContract) CreateAsset(ctx contractapi.TransactionContextInterface, userUid string, firstName string, lastName string,
+func (s *SmartContract) CreateAsset(ctx contractapi.TransactionContextInterface, userUid string, email string, firstName string, lastName string,
 	addressLine1 string, addressLine2 string, city string, province string, postalCode int, ttl string,
 	nik string, idcard string, businessLicense string) error {
 	exists, err := s.AssetExists(ctx, userUid)
@@ -56,6 +59,7 @@ func (s *SmartContract) CreateAsset(ctx contractapi.TransactionContextInterface,
 
 	user := User{
 		UserUid:         userUid,
+		Email:           email,
 		FirstName:       firstName,
 		LastName:        lastName,
 		AddressLine1:    addressLine1,
@@ -73,7 +77,18 @@ func (s *SmartContract) CreateAsset(ctx contractapi.TransactionContextInterface,
 	if err != nil {
 		return err
 	}
-	return ctx.GetStub().PutState(userUid, assetJson)
+	err = ctx.GetStub().PutState(userUid, assetJson)
+	if err != nil {
+		return fmt.Errorf(err.Error())
+	}
+
+	indexKey, err := ctx.GetStub().CreateCompositeKey(index, []string{email, userUid})
+	if err != nil {
+		return fmt.Errorf(err.Error())
+	}
+	value := []byte{0x00}
+	return ctx.GetStub().PutState(indexKey, value)
+	// return ctx.GetStub().PutState(userUid, assetJson)
 }
 
 func (s *SmartContract) ReadAsset(ctx contractapi.TransactionContextInterface, userUid string) (*User, error) {
@@ -93,7 +108,7 @@ func (s *SmartContract) ReadAsset(ctx contractapi.TransactionContextInterface, u
 	return &user, nil
 }
 
-func (s *SmartContract) UpdateAsset(ctx contractapi.TransactionContextInterface, userUid string, firstName string, lastName string,
+func (s *SmartContract) UpdateAsset(ctx contractapi.TransactionContextInterface, userUid string, email string, firstName string, lastName string,
 	addressLine1 string, addressLine2 string, city string, province string, postalCode int,
 	ttl string, nik string, idcard string, businessLicense string) error {
 	exists, err := s.AssetExists(ctx, userUid)
@@ -106,6 +121,7 @@ func (s *SmartContract) UpdateAsset(ctx contractapi.TransactionContextInterface,
 
 	user := User{
 		UserUid:         userUid,
+		Email:           email,
 		FirstName:       firstName,
 		LastName:        lastName,
 		AddressLine1:    addressLine1,
@@ -170,4 +186,40 @@ func (s *SmartContract) AssetExists(ctx contractapi.TransactionContextInterface,
 		return false, fmt.Errorf("failed to read from state database: %v", err)
 	}
 	return assetJson != nil, nil
+}
+
+func (s *SmartContract) ReadAssetByEmail(ctx contractapi.TransactionContextInterface, email string) ([]*User, error) {
+	indexIterator, err := ctx.GetStub().GetStateByPartialCompositeKey(index, []string{email})
+	if err != nil {
+		return nil, err
+	}
+	defer indexIterator.Close()
+
+	var records []*User
+	// var parts []string
+	for indexIterator.HasNext() {
+		responseRange, err := indexIterator.Next()
+		if err != nil {
+			return nil, err
+		}
+
+		_, compositeKeyParts, err := ctx.GetStub().SplitCompositeKey(responseRange.Key)
+		if err != nil {
+			return nil, err
+		}
+
+		if len(compositeKeyParts) > 1 {
+			userUid := compositeKeyParts[1]
+			record, err := s.ReadAsset(ctx, userUid)
+			if err != nil {
+				return nil, err
+			}
+			records = append(records, record)
+		}
+
+		// parts = append(parts, compositeKeyParts[0])
+		// parts = append(parts, compositeKeyParts[1])
+
+	}
+	return records, nil
 }

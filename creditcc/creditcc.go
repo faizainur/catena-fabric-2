@@ -29,6 +29,7 @@ type PaginatedQueryResult struct {
 }
 
 const index = "useruid~recordid"
+const index2 = "bankname~recordid"
 
 func main() {
 	assetChaincode, err := contractapi.NewChaincode(&SmartContract{})
@@ -106,7 +107,17 @@ func (s *SmartContract) CreateAsset(ctx contractapi.TransactionContextInterface,
 	}
 	value := []byte{0x00}
 	// fmt.Printf("Store index key")
-	return ctx.GetStub().PutState(indexKey, value)
+	err = ctx.GetStub().PutState(indexKey, value)
+	if err != nil {
+		return fmt.Errorf("e %s", err.Error())
+	}
+
+	indexKey2, err := ctx.GetStub().CreateCompositeKey(index2, []string{bankName, recordId})
+	if err != nil {
+		fmt.Printf("E")
+		return fmt.Errorf("e %s", recordId)
+	}
+	return ctx.GetStub().PutState(indexKey2, value)
 	// err = ctx.GetStub().PutState(indexKey, value)
 	// if err != nil {
 	// 	return fmt.Errorf("f")
@@ -196,6 +207,42 @@ func (s *SmartContract) UpdateAsset(ctx contractapi.TransactionContextInterface,
 
 func (s *SmartContract) ReadAssetByUserUid(ctx contractapi.TransactionContextInterface, userUid string) ([]*CreditRecord, error) {
 	indexIterator, err := ctx.GetStub().GetStateByPartialCompositeKey(index, []string{userUid})
+	if err != nil {
+		return nil, err
+	}
+	defer indexIterator.Close()
+
+	var records []*CreditRecord
+	// var parts []string
+	for indexIterator.HasNext() {
+		responseRange, err := indexIterator.Next()
+		if err != nil {
+			return nil, err
+		}
+
+		_, compositeKeyParts, err := ctx.GetStub().SplitCompositeKey(responseRange.Key)
+		if err != nil {
+			return nil, err
+		}
+
+		if len(compositeKeyParts) > 1 {
+			recordId := compositeKeyParts[1]
+			record, err := s.ReadAsset(ctx, recordId)
+			if err != nil {
+				return nil, err
+			}
+			records = append(records, record)
+		}
+
+		// parts = append(parts, compositeKeyParts[0])
+		// parts = append(parts, compositeKeyParts[1])
+
+	}
+	return records, nil
+}
+
+func (s *SmartContract) ReadAssetByBank(ctx contractapi.TransactionContextInterface, bankName string) ([]*CreditRecord, error) {
+	indexIterator, err := ctx.GetStub().GetStateByPartialCompositeKey(index2, []string{bankName})
 	if err != nil {
 		return nil, err
 	}
