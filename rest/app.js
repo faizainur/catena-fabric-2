@@ -22,6 +22,7 @@ var corsOptions = {
     "https://bankA.catena.id",
     "https://bankB.catena.id",
     "https://gov.catena.id",
+    "https://admin.catena.id",
   ],
   methods: ["GET", "PUT", "POST", "OPTIONS"],
   allowedHeaders: [
