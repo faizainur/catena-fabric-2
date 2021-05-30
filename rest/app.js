@@ -18,7 +18,7 @@ var corsOptions = {
     "https://dashboard.catena.id",
     "https://api.catena.id",
     "https://catena.id",
-    "localhost",
+    "http://localhost:8080",
     "https://bankA.catena.id",
     "https://bankB.catena.id",
     "https://gov.catena.id",
