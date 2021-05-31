@@ -30,6 +30,7 @@ type PaginatedQueryResult struct {
 
 const index = "useruid~recordid"
 const index2 = "bankname~recordid"
+const index3 = "nik~recordid"
 
 func main() {
 	assetChaincode, err := contractapi.NewChaincode(&SmartContract{})
@@ -108,6 +109,16 @@ func (s *SmartContract) CreateAsset(ctx contractapi.TransactionContextInterface,
 	value := []byte{0x00}
 	// fmt.Printf("Store index key")
 	err = ctx.GetStub().PutState(indexKey, value)
+	if err != nil {
+		return fmt.Errorf("e %s", err.Error())
+	}
+
+	indexKey3, err := ctx.GetStub().CreateCompositeKey(index3, []string{nik, recordId})
+	if err != nil {
+		fmt.Printf("E")
+		return fmt.Errorf("e %s", recordId)
+	}
+	err = ctx.GetStub().PutState(indexKey3, value)
 	if err != nil {
 		return fmt.Errorf("e %s", err.Error())
 	}
@@ -243,6 +254,42 @@ func (s *SmartContract) ReadAssetByUserUid(ctx contractapi.TransactionContextInt
 
 func (s *SmartContract) ReadAssetByBank(ctx contractapi.TransactionContextInterface, bankName string) ([]*CreditRecord, error) {
 	indexIterator, err := ctx.GetStub().GetStateByPartialCompositeKey(index2, []string{bankName})
+	if err != nil {
+		return nil, err
+	}
+	defer indexIterator.Close()
+
+	var records []*CreditRecord
+	// var parts []string
+	for indexIterator.HasNext() {
+		responseRange, err := indexIterator.Next()
+		if err != nil {
+			return nil, err
+		}
+
+		_, compositeKeyParts, err := ctx.GetStub().SplitCompositeKey(responseRange.Key)
+		if err != nil {
+			return nil, err
+		}
+
+		if len(compositeKeyParts) > 1 {
+			recordId := compositeKeyParts[1]
+			record, err := s.ReadAsset(ctx, recordId)
+			if err != nil {
+				return nil, err
+			}
+			records = append(records, record)
+		}
+
+		// parts = append(parts, compositeKeyParts[0])
+		// parts = append(parts, compositeKeyParts[1])
+
+	}
+	return records, nil
+}
+
+func (s *SmartContract) ReadAssetByNik(ctx contractapi.TransactionContextInterface, nik string) ([]*CreditRecord, error) {
+	indexIterator, err := ctx.GetStub().GetStateByPartialCompositeKey(index3, []string{nik})
 	if err != nil {
 		return nil, err
 	}
