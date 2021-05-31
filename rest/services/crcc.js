@@ -301,7 +301,7 @@ exports.isExist = (recordId) => {
         gateway.disconnect();
       }
     } catch (error) {
-      console.error(`ERROR upcc chaincode assetExist : ${error}`);
+      console.error(`ERROR crcc chaincode assetExist : ${error}`);
       reject(error.message);
     }
   });
@@ -345,7 +345,7 @@ exports.updateAsset = async (record) => {
         gateway.disconnect();
       }
     } catch (error) {
-      console.error(`ERROR upcc chaincode updateAsset : ${error}`);
+      console.error(`ERROR crcc chaincode updateAsset : ${error}`);
       reject(error.message);
     }
   });
