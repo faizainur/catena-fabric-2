@@ -356,6 +356,8 @@ exports.approveAsset = async (recordId) => {
     try {
       var record = await this.readAsset(recordId);
       // var parsedRecord = JSON.parse(record.toString());
+      console.log(record);
+      console.log("updating");
       var updatedRecord = {
         recordId: `${record.record_id}`,
         userUid: `${record.user_uid}`,
@@ -365,6 +367,8 @@ exports.approveAsset = async (recordId) => {
         amount: `${record.amount}`,
         status: `approved`,
       };
+      console.log("after");
+      console.log(updatedRecord);
       var result = await this.updateAsset(updatedRecord);
       resolve(result);
     } catch (error) {
