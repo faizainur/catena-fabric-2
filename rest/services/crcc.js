@@ -355,14 +355,14 @@ exports.approveAsset = async (recordId) => {
   return new Promise(async (resolve, reject) => {
     try {
       var record = await this.readAsset(recordId);
-      var parsedRecord = JSON.parse(record.toString());
+      // var parsedRecord = JSON.parse(record.toString());
       var updatedRecord = {
-        recordId: `${parsedRecord.record_id}`,
-        userUid: `${parsedRecord.user_uid}`,
-        nik: `${parsedRecord.nik}`,
-        creditType: `${parsedRecord.credit_type}`,
-        bankName: `${parsedRecord.bank_name}`,
-        amount: `${parsedRecord.amount}`,
+        recordId: `${record.record_id}`,
+        userUid: `${record.user_uid}`,
+        nik: `${record.nik}`,
+        creditType: `${record.credit_type}`,
+        bankName: `${record.bank_name}`,
+        amount: `${record.amount}`,
         status: `approved`,
       };
       var result = await this.updateAsset(updatedRecord);
@@ -377,14 +377,14 @@ exports.rejectAsset = async (recordId) => {
   return new Promise(async (resolve, reject) => {
     try {
       var record = await this.readAsset(recordId);
-      var parsedRecord = JSON.parse(record.toString());
+      // var parsedRecord = JSON.parse(record.toString());
       var updatedRecord = {
-        recordId: `${parsedRecord.record_id}`,
-        userUid: `${parsedRecord.user_uid}`,
-        nik: `${parsedRecord.nik}`,
-        creditType: `${parsedRecord.credit_type}`,
-        bankName: `${parsedRecord.bank_name}`,
-        amount: `${parsedRecord.amount}`,
+        recordId: `${record.record_id}`,
+        userUid: `${record.user_uid}`,
+        nik: `${record.nik}`,
+        creditType: `${record.credit_type}`,
+        bankName: `${record.bank_name}`,
+        amount: `${record.amount}`,
         status: `rejected`,
       };
 
