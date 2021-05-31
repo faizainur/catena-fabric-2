@@ -360,6 +360,7 @@ exports.approveAsset = async (recordId) => {
       console.log("updating");
       var updatedRecord = {
         recordId: `${record.record_id}`,
+        email: `${record.email}`,
         userUid: `${record.user_uid}`,
         nik: `${record.nik}`,
         creditType: `${record.credit_type}`,
@@ -384,6 +385,7 @@ exports.rejectAsset = async (recordId) => {
       // var parsedRecord = JSON.parse(record.toString());
       var updatedRecord = {
         recordId: `${record.record_id}`,
+        email: `${record.email}`,
         userUid: `${record.user_uid}`,
         nik: `${record.nik}`,
         creditType: `${record.credit_type}`,
