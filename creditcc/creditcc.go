@@ -14,6 +14,7 @@ type SmartContract struct {
 
 type CreditRecord struct {
 	RecordId   string `json:"record_id,omitempty"  bson:"record_id"  form:"record_id"  binding:"record_id"`
+	Email string `json:"email,omitempty"  bson:"email"  form:"email"  binding:"email"` 
 	UserUid    string `json:"user_uid,omitempty"  bson:"user_uid"  form:"user_uid"  binding:"user_uid"`
 	Nik        string `json:"nik,omitempty"  bson:"nik"  form:"nik"  binding:"nik"`
 	CreditType string `json:"credit_type,omitempty"  bson:"credit_type"  form:"credit_type"  binding:"credit_type"`
@@ -69,7 +70,7 @@ func (s *SmartContract) CheckCreditFromSameBank(ctx contractapi.TransactionConte
 	return false, nil
 }
 
-func (s *SmartContract) CreateAsset(ctx contractapi.TransactionContextInterface, recordId string, userUid string,
+func (s *SmartContract) CreateAsset(ctx contractapi.TransactionContextInterface, recordId string, email string, userUid string,
 	nik string, creditType string, bankName string, amount string, status string) error {
 	checkStatus, err := s.CheckCreditFromSameBank(ctx, userUid, bankName)
 	if err != nil {
@@ -82,6 +83,7 @@ func (s *SmartContract) CreateAsset(ctx contractapi.TransactionContextInterface,
 
 	creditRecord := CreditRecord{
 		RecordId:   recordId,
+		Email: email,
 		UserUid:    userUid,
 		Nik:        nik,
 		CreditType: creditType,
@@ -191,7 +193,7 @@ func (s *SmartContract) GetAllAssets(ctx contractapi.TransactionContextInterface
 	return records, nil
 }
 
-func (s *SmartContract) UpdateAsset(ctx contractapi.TransactionContextInterface, recordId string, userUid string,
+func (s *SmartContract) UpdateAsset(ctx contractapi.TransactionContextInterface, recordId string, email string, userUid string,
 	nik string, creditType string, bankName string, amount string, status string) error {
 	exists, err := s.AssetExists(ctx, recordId)
 	if err != nil {
@@ -202,6 +204,7 @@ func (s *SmartContract) UpdateAsset(ctx contractapi.TransactionContextInterface,
 	}
 	creditRecord := CreditRecord{
 		RecordId:   recordId,
+		Email: email,
 		UserUid:    userUid,
 		Nik:        nik,
 		CreditType: creditType,

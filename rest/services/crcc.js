@@ -118,6 +118,7 @@ exports.createAsset = async (record) => {
         var result = await contract.submitTransaction(
           "CreateAsset",
           recordId,
+          record.email,
           record.userUid,
           record.nik,
           record.creditType,
@@ -328,6 +329,7 @@ exports.updateAsset = async (record) => {
         var result = await contract.submitTransaction(
           "UpdateAsset",
           record.recordId,
+          record.email,
           record.userUid,
           record.nik,
           record.creditType,

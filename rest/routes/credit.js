@@ -24,6 +24,7 @@ router.get("/get", async (req, res, next) => {
 router.post("/create", async (req, res, next) => {
   try {
     var record = {
+      email: `${req.body.email}`,
       userUid: `${req.body.user_uid}`,
       nik: `${req.body.nik}`,
       creditType: `${req.body.credit_type}`,
@@ -85,6 +86,7 @@ router.post("/update", async (req, res, next) => {
   try {
     var record = {
       recordId: `${req.body.record_id}`,
+      email: `${req.body.email}`,
       userUid: `${req.body.user_uid}`,
       nik: `${req.body.nik}`,
       creditType: `${req.body.credit_type}`,
