@@ -75,7 +75,7 @@ func (s *SmartContract) CreateAsset(ctx contractapi.TransactionContextInterface,
 	checkStatus, err := s.CheckCreditFromSameBank(ctx, userUid, bankName)
 	if err != nil {
 		fmt.Printf("A")
-		return fmt.Errorf("a")
+		return fmt.Errorf("A : %s", err.Error())
 	}
 	if checkStatus {
 		return fmt.Errorf("this user (%s) has a credit record from another bank", userUid)
@@ -95,40 +95,40 @@ func (s *SmartContract) CreateAsset(ctx contractapi.TransactionContextInterface,
 	assetJson, err := json.Marshal(creditRecord)
 	if err != nil {
 		fmt.Printf("C")
-		return fmt.Errorf("c")
+		return fmt.Errorf("c : %s", err.Error())
 	}
 	err = ctx.GetStub().PutState(recordId, assetJson)
 	if err != nil {
 		fmt.Printf("D")
-		return fmt.Errorf("d")
+		return fmt.Errorf("f : %s", err.Error())
 	}
 
 	indexKey, err := ctx.GetStub().CreateCompositeKey(index, []string{userUid, recordId})
 	if err != nil {
 		fmt.Printf("E")
-		return fmt.Errorf("e %s", recordId)
+		return fmt.Errorf("e Error Record ID : %s, %s", recordId, err.Error())
 	}
 	value := []byte{0x00}
 	// fmt.Printf("Store index key")
 	err = ctx.GetStub().PutState(indexKey, value)
 	if err != nil {
-		return fmt.Errorf("e %s", err.Error())
+		return fmt.Errorf("f :  %s", err.Error())
 	}
 
 	indexKey3, err := ctx.GetStub().CreateCompositeKey(index3, []string{nik, recordId})
 	if err != nil {
 		fmt.Printf("E")
-		return fmt.Errorf("e %s", recordId)
+		return fmt.Errorf("g Error Record ID :  %s, %s", recordId, err.Error())
 	}
 	err = ctx.GetStub().PutState(indexKey3, value)
 	if err != nil {
-		return fmt.Errorf("e %s", err.Error())
+		return fmt.Errorf("h :  %s", err.Error())
 	}
 
 	indexKey2, err := ctx.GetStub().CreateCompositeKey(index2, []string{bankName, recordId})
 	if err != nil {
 		fmt.Printf("E")
-		return fmt.Errorf("e %s", recordId)
+		return fmt.Errorf("i Error Record ID : %s, %s", recordId, err.Error())
 	}
 	return ctx.GetStub().PutState(indexKey2, value)
 	// err = ctx.GetStub().PutState(indexKey, value)
