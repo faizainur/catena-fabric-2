@@ -31,7 +31,6 @@ type User struct {
 	Nik             string `json:"nik,omitempty"  bson:"nik"  form:"nik"  binding:"nik"`
 	IdCard          string `json:"idcard,omitempty"  bson:"idcard"  form:"idcard"  binding:"idcard"`
 	BusinessLicense string `json:"business_license,omitempty"  bson:"business_license"  form:"business_license"  binding:"business_license"`
-	PhoneNumber string `json:"phone_number,omitempty"  bson:"phone_number"  form:"phone_number"  binding:"phone_number"`
 }
 
 const index = "email~useruid"
