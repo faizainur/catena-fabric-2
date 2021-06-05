@@ -59,7 +59,6 @@ router.post("/register", authService.validateJwt, async (req, res, next) => {
       nik: `${req.body.nik}`,
       idCard: `${req.body.id_card}`,
       businessLicense: `${req.body.business_license}`,
-      phoneNumber: `${req.body.phone_number}`,
     };
 
     console.log(user);
@@ -110,7 +109,6 @@ router.post("/update", authService.validateJwt, async (req, res, next) => {
       nik: `${req.body.nik}`,
       idCard: `${req.body.id_card}`,
       businessLicense: `${req.body.business_license}`,
-      phoneNumber: `${req.body.phone_number}`,
     };
     await upcc.updateAsset(user);
     res.status(200);

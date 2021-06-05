@@ -49,7 +49,7 @@ func main() {
 
 func (s *SmartContract) CreateAsset(ctx contractapi.TransactionContextInterface, userUid string, email string, firstName string, lastName string,
 	addressLine1 string, addressLine2 string, city string, province string, postalCode int, ttl string,
-	nik string, idcard string, businessLicense string, phoneNumber string) error {
+	nik string, idcard string, businessLicense string) error {
 	exists, err := s.AssetExists(ctx, userUid)
 	if err != nil {
 		return err
@@ -72,7 +72,6 @@ func (s *SmartContract) CreateAsset(ctx contractapi.TransactionContextInterface,
 		Nik:             nik,
 		IdCard:          idcard,
 		BusinessLicense: businessLicense,
-		PhoneNumber: phoneNumber,
 	}
 
 	assetJson, err := json.Marshal(user)
@@ -112,7 +111,7 @@ func (s *SmartContract) ReadAsset(ctx contractapi.TransactionContextInterface, u
 
 func (s *SmartContract) UpdateAsset(ctx contractapi.TransactionContextInterface, userUid string, email string, firstName string, lastName string,
 	addressLine1 string, addressLine2 string, city string, province string, postalCode int,
-	ttl string, nik string, idcard string, businessLicense string, phoneNumber string) error {
+	ttl string, nik string, idcard string, businessLicense string) error {
 	exists, err := s.AssetExists(ctx, userUid)
 	if err != nil {
 		return err
@@ -135,7 +134,6 @@ func (s *SmartContract) UpdateAsset(ctx contractapi.TransactionContextInterface,
 		Nik:             nik,
 		IdCard:          idcard,
 		BusinessLicense: businessLicense,
-		PhoneNumber: phoneNumber,
 	}
 
 	assetJson, err := json.Marshal(user)

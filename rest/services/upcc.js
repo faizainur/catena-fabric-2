@@ -117,8 +117,7 @@ exports.createAsset = async (user) => {
           user.ttl,
           user.nik,
           user.idCard,
-          user.businessLicense,
-          user.phoneNumber
+          user.businessLicense
         );
         // console.log(`*** Result: ${prettyJSONString(result3.toString())}`);
 
@@ -228,8 +227,7 @@ exports.updateAsset = (user) => {
           user.ttl,
           user.nik,
           user.idCard,
-          user.businessLicense,
-          user.phoneNumber
+          user.businessLicense
         );
         // console.log(`*** Result: ${prettyJSONString(result3.toString())}`);
 
