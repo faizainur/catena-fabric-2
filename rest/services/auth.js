@@ -64,6 +64,7 @@ exports.validateJwt = (req, res, next) => {
         .then((response) => response.json())
         .then((json) => {
           if (json.is_valid) {
+            console.log("valid");
             next();
           } else {
             res.status(401);

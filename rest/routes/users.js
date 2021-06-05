@@ -43,8 +43,8 @@ router.get("/bank/get", authService.introspectToken, async (req, res, next) => {
   }
 });
 
-// router.post("/register", authService.validateJwt, async (req, res, next) => {
-router.post("/register", async (req, res, next) => {
+router.post("/register", authService.validateJwt, async (req, res, next) => {
+  // router.post("/register", async (req, res, next) => {
   try {
     var user = {
       userUid: `${req.body.user_uid}`,
