@@ -31,6 +31,7 @@ type User struct {
 	Nik             string `json:"nik,omitempty"  bson:"nik"  form:"nik"  binding:"nik"`
 	IdCard          string `json:"idcard,omitempty"  bson:"idcard"  form:"idcard"  binding:"idcard"`
 	BusinessLicense string `json:"business_license,omitempty"  bson:"business_license"  form:"business_license"  binding:"business_license"`
+	PhoneNumber string `json:"phone_number,omitempty"  bson:"phone_number"  form:"phone_number"  binding:"phone_number"`
 }
 
 const index = "email~useruid"
@@ -48,7 +49,7 @@ func main() {
 
 func (s *SmartContract) CreateAsset(ctx contractapi.TransactionContextInterface, userUid string, email string, firstName string, lastName string,
 	addressLine1 string, addressLine2 string, city string, province string, postalCode int, ttl string,
-	nik string, idcard string, businessLicense string) error {
+	nik string, idcard string, businessLicense string, phoneNumber string) error {
 	exists, err := s.AssetExists(ctx, userUid)
 	if err != nil {
 		return err
@@ -71,6 +72,7 @@ func (s *SmartContract) CreateAsset(ctx contractapi.TransactionContextInterface,
 		Nik:             nik,
 		IdCard:          idcard,
 		BusinessLicense: businessLicense,
+		PhoneNumber: phoneNumber,
 	}
 
 	assetJson, err := json.Marshal(user)
@@ -110,7 +112,7 @@ func (s *SmartContract) ReadAsset(ctx contractapi.TransactionContextInterface, u
 
 func (s *SmartContract) UpdateAsset(ctx contractapi.TransactionContextInterface, userUid string, email string, firstName string, lastName string,
 	addressLine1 string, addressLine2 string, city string, province string, postalCode int,
-	ttl string, nik string, idcard string, businessLicense string) error {
+	ttl string, nik string, idcard string, businessLicense string, phoneNumber string) error {
 	exists, err := s.AssetExists(ctx, userUid)
 	if err != nil {
 		return err
@@ -133,6 +135,7 @@ func (s *SmartContract) UpdateAsset(ctx contractapi.TransactionContextInterface,
 		Nik:             nik,
 		IdCard:          idcard,
 		BusinessLicense: businessLicense,
+		PhoneNumber: phoneNumber,
 	}
 
 	assetJson, err := json.Marshal(user)
