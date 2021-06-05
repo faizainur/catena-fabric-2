@@ -64,7 +64,7 @@ router.post("/register", authService.validateJwt, async (req, res, next) => {
 
     console.log(user);
 
-    // await upcc.createAsset(user);
+    await upcc.createAsset(user);
     res.status(200);
     res.send("OK");
   } catch (error) {
