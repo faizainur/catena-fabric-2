@@ -434,3 +434,40 @@ exports.deleteAsset = (recordId) => {
     }
   });
 };
+
+exports.checkSameBank = (userUid, bankName) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const gateway = new Gateway();
+
+      try {
+        await gateway.connect(ccp, {
+          wallet,
+          identity: org1UserId,
+          discovery: { enabled: true, asLocalhost: true }, // using asLocalhost as this gateway is using a fabric network deployed locally
+        });
+
+        // Build a network instance based on the channel where the smart contract is deployed
+        const network = await gateway.getNetwork(channelName);
+
+        // Get the contract from the network.
+        const contract = network.getContract(chaincodeName);
+
+        // console.log('\n--> Evaluate Transaction: GetAllAssets, function returns all the current assets on the ledger');
+        var result = await contract.submitTransaction(
+          "CheckCreditFromSameBank",
+          userUid,
+          bankName
+        );
+        // console.log(`*** Result: ${prettyJSONString(result3.toString())}`);
+
+        resolve(result);
+      } finally {
+        gateway.disconnect();
+      }
+    } catch (error) {
+      console.error(`ERROR crcc chaincode assetExist : ${error}`);
+      reject(error.message);
+    }
+  });
+};

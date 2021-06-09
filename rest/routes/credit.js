@@ -31,9 +31,19 @@ router.post("/create", async (req, res, next) => {
       bankName: `${req.body.bank_name}`,
       amount: `${req.body.amount}`,
     };
-    await crcc.createAsset(record);
-    res.status(200);
-    res.send("OK");
+    var checkStatus = await crcc.checkSameBank(
+      req.body.user_uid,
+      req.body.bank_name
+    );
+    console.log(`${checkStatus}`);
+    if (`${checkStatus}` === "true") {
+      res.status(400);
+      res.send("Same bank");
+    } else {
+      await crcc.createAsset(record);
+      res.status(200);
+      res.send("OK");
+    }
   } catch (error) {
     res.status(400);
     res.send(error);
@@ -133,4 +143,16 @@ router.get("/list/bank", async (req, res) => {
   }
 });
 
+router.get("/check", async (req, res) => {
+  try {
+    var result = await crcc.checkSameBank(
+      req.query.user_uid,
+      req.query.bank_name
+    );
+    res.send(result);
+  } catch (error) {
+    res.status(400);
+    res.send(error);
+  }
+});
 module.exports = router;

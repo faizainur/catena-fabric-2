@@ -72,14 +72,14 @@ func (s *SmartContract) CheckCreditFromSameBank(ctx contractapi.TransactionConte
 
 func (s *SmartContract) CreateAsset(ctx contractapi.TransactionContextInterface, recordId string, email string, userUid string,
 	nik string, creditType string, bankName string, amount string, status string) error {
-	checkStatus, err := s.CheckCreditFromSameBank(ctx, userUid, bankName)
-	if err != nil {
-		fmt.Printf("A")
-		return fmt.Errorf("A : %s", err.Error())
-	}
-	if checkStatus {
-		return fmt.Errorf("this user (%s) has a credit record from another bank", userUid)
-	}
+	// checkStatus, err := s.CheckCreditFromSameBank(ctx, userUid, bankName)
+	// if err != nil {
+	// 	fmt.Printf("A")
+	// 	return fmt.Errorf("A : %s", err.Error())
+	// }
+	// if checkStatus {
+	// 	return fmt.Errorf("this user (%s) has a credit record from another bank", userUid)
+	// }
 
 	creditRecord := CreditRecord{
 		RecordId:   recordId,
