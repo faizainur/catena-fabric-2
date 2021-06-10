@@ -31,7 +31,7 @@ type User struct {
 	Nik             string `json:"nik,omitempty"  bson:"nik"  form:"nik"  binding:"nik"`
 	IdCard          string `json:"idcard,omitempty"  bson:"idcard"  form:"idcard"  binding:"idcard"`
 	BusinessLicense string `json:"business_license,omitempty"  bson:"business_license"  form:"business_license"  binding:"business_license"`
-	PhoneNumber string `json:"phone_number,omitempty"  bson:"phone_number"  form:"phone_number"  binding:"phone_number"`
+	PhoneNumber     string `json:"phone_number,omitempty"  bson:"phone_number"  form:"phone_number"  binding:"phone_number"`
 }
 
 const index = "email~useruid"
@@ -72,7 +72,7 @@ func (s *SmartContract) CreateAsset(ctx contractapi.TransactionContextInterface,
 		Nik:             nik,
 		IdCard:          idcard,
 		BusinessLicense: businessLicense,
-		PhoneNumber: phoneNumber,
+		PhoneNumber:     phoneNumber,
 	}
 
 	assetJson, err := json.Marshal(user)
@@ -135,7 +135,7 @@ func (s *SmartContract) UpdateAsset(ctx contractapi.TransactionContextInterface,
 		Nik:             nik,
 		IdCard:          idcard,
 		BusinessLicense: businessLicense,
-		PhoneNumber: phoneNumber,
+		PhoneNumber:     phoneNumber,
 	}
 
 	assetJson, err := json.Marshal(user)
@@ -152,6 +152,22 @@ func (s *SmartContract) DeleteAsset(ctx contractapi.TransactionContextInterface,
 	}
 	if !exists {
 		return fmt.Errorf("the user %s does not exist", userUid)
+	}
+
+	record, err := s.ReadAsset(ctx, userUid)
+
+	if err != nil {
+		return fmt.Errorf(err.Error())
+	}
+
+	indexKey, err := ctx.GetStub().CreateCompositeKey(index, []string{record.Email, userUid})
+	if err != nil {
+		return fmt.Errorf(err.Error())
+	}
+
+	err = ctx.GetStub().DelState(indexKey)
+	if err != nil {
+		return fmt.Errorf(err.Error())
 	}
 	return ctx.GetStub().DelState(userUid)
 }

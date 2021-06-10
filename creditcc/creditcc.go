@@ -163,6 +163,41 @@ func (s *SmartContract) DeleteAsset(ctx contractapi.TransactionContextInterface,
 	if !exists {
 		return fmt.Errorf("the user %s does not exist", recordId)
 	}
+		record, err := s.ReadAsset(ctx, recordId)
+	if err != nil {
+		return fmt.Errorf(err.Error())
+	}
+
+	indexKey, err := ctx.GetStub().CreateCompositeKey(index, []string{record.UserUid, recordId})
+	if err != nil {
+		return fmt.Errorf(err.Error())
+	}
+
+	err = ctx.GetStub().DelState(indexKey)
+	if err != nil {
+		return fmt.Errorf(err.Error())
+	}
+
+
+	indexKey2, err := ctx.GetStub().CreateCompositeKey(index2, []string{record.BankName, recordId})
+	if err != nil {
+		return fmt.Errorf(err.Error())
+	}
+
+	err = ctx.GetStub().DelState(indexKey2)
+	if err != nil {
+		return fmt.Errorf(err.Error())
+	}
+
+	indexKey3, err := ctx.GetStub().CreateCompositeKey(index3, []string{record.Nik, recordId})
+	if err != nil {
+		return fmt.Errorf(err.Error())
+	}
+
+	err = ctx.GetStub().DelState(indexKey3)
+	if err != nil {
+		return fmt.Errorf(err.Error())
+	}
 	return ctx.GetStub().DelState(recordId)
 }
 
